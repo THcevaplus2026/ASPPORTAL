@@ -16,6 +16,7 @@
     padding: 0;
     box-sizing: border-box;
     font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    -webkit-tap-highlight-color: transparent;
 }
 
 body {
@@ -76,6 +77,7 @@ body {
     overflow-y: auto;
     position: relative;
     width: 100%;
+    -webkit-overflow-scrolling: touch;
 }
 
 .header-section {
@@ -85,13 +87,6 @@ body {
     margin-bottom: 30px;
     flex-wrap: wrap;
     gap: 15px;
-}
-
-.session-title {
-    margin-bottom: 15px;
-    color: var(--dark);
-    font-size: 1.1rem;
-    font-weight: 600;
 }
 
 /* =========================================
@@ -110,28 +105,6 @@ body {
     font-weight: bold !important;
     text-decoration: none !important;
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    transition: 0.3s;
-}
-
-.btn-novo-processo:active { transform: scale(0.95); }
-
-.search-box {
-    display: flex;
-    align-items: center;
-    background: white;
-    padding: 10px 15px;
-    border-radius: 8px;
-    border: 1px solid #ddd;
-    width: 100%;
-    max-width: 350px;
-}
-
-.search-box input {
-    border: none;
-    padding-left: 10px;
-    width: 100%;
-    outline: none;
-    font-size: 15px;
 }
 
 .card-registro {
@@ -147,18 +120,61 @@ body {
     transition: transform 0.2s;
 }
 
-#tela-exemplos .card-registro:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
-    background: #fdfdfd;
+/* =========================================
+   ESTILO DO ACORDEÃO DE FOTOS (NOVO - CORREÇÃO)
+   ========================================= */
+.photo-accordion {
+    border: 1px solid #ccd1d1;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    overflow: hidden;
+    background: white;
 }
 
-.pagination { display: flex; justify-content: center; gap: 8px; margin-top: 20px; padding: 20px 0; }
-.btn-pag { background: white; border: 1px solid #ddd; padding: 10px 16px; border-radius: 6px; cursor: pointer; transition: 0.2s; }
-.btn-pag.active { background: var(--blue); color: white; border-color: var(--blue); }
+.accordion-header {
+    width: 100%;
+    background-color: #f1f2f6; /* Fundo cinza suave */
+    color: #2c3e50;
+    padding: 15px 20px;
+    border: none;
+    border-bottom: 1px solid transparent;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 14px;
+    transition: all 0.2s ease;
+    outline: none;
+}
+
+.accordion-header:hover {
+    background-color: #e2e6ea;
+}
+
+.accordion-content {
+    display: none;
+    padding: 15px;
+    background: #fff;
+    border-top: 1px solid #ccd1d1;
+
+    /* SCROLL INTERNO PARA AS FOTOS */
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.accordion-content input[type="file"] {
+    width: 100%;
+    padding: 10px;
+    background: #fafafa;
+    border: 1px dashed #ccc;
+    border-radius: 6px;
+    margin-bottom: 15px;
+    cursor: pointer;
+}
 
 /* =========================================
-   MODAIS (ESTRUTURA FIXA)
+   MODAIS
    ========================================= */
 .modal-overlay {
     position: fixed;
@@ -168,7 +184,6 @@ body {
     align-items: center;
     justify-content: center;
     z-index: 2000;
-    padding: 15px;
 }
 
 .modal-card {
@@ -180,8 +195,8 @@ body {
     flex-direction: column;
     max-height: 90vh;
     box-shadow: 0 15px 40px rgba(0,0,0,0.3);
-    overflow: hidden;
     position: relative;
+    overflow: hidden;
 }
 
 .modal-header {
@@ -196,8 +211,9 @@ body {
 
 .modal-body {
     padding: 20px;
-    overflow-y: auto;
     flex: 1;
+    overflow-y: auto !important; /* Habilita o scroll */
+    min-height: 0; /* Essencial para flexbox permitir scroll */
     -webkit-overflow-scrolling: touch;
 }
 
@@ -209,59 +225,129 @@ body {
     justify-content: flex-end;
     border-top: 1px solid #eee;
     flex-shrink: 0;
-    min-height: 70px;
 }
 
 /* =========================================
-   FORMULÁRIOS E FOTOS
+   FORMULÁRIOS E PREVIEWS
    ========================================= */
 .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
 .full-width { grid-column: span 2; }
-.field { display: flex; flex-direction: column; gap: 5px; }
-.field-label { font-size: 11px; font-weight: bold; color: #7f8c8d; text-transform: uppercase; }
 
 input, textarea {
     padding: 12px;
     border: 1px solid #ccd1d1;
     border-radius: 8px;
     font-size: 16px;
-    outline: none;
-    background: #fff;
     width: 100%;
+    outline: none;
 }
 
-.photo-accordion { margin-bottom: 20px; border: 1px solid #ddd; border-radius: 8px; overflow: hidden; }
-.accordion-header { width: 100%; background: #f8f9fa; border: none; padding: 15px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-weight: bold; }
-.accordion-content { display: none; padding: 15px; border-top: 1px solid #ddd; background: #fff; }
+/* Validação Visual simples */
+input:focus { border-color: var(--blue); }
 
 .preview-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-    gap: 10px;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 12px;
+    margin-top: 15px;
 }
 
 .preview-item {
     position: relative;
-    aspect-ratio: 1/1;
     border-radius: 8px;
     overflow: hidden;
-    border: 1px solid #eee;
+    background: #eee;
+    border: 1px solid #ddd;
+    display: flex;
+    flex-direction: column;
 }
 
-.preview-item img { width: 100%; height: 100%; object-fit: cover; }
+.preview-item img {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+}
 
-.btn-remove-foto {
-    position: absolute;
-    top: 4px; right: 4px;
-    background: var(--red);
-    color: white; border: none; border-radius: 50%;
-    width: 24px; height: 24px;
-    cursor: pointer; z-index: 5;
-    display: flex; align-items: center; justify-content: center;
+.btn-download-foto {
+    background: var(--green);
+    color: white;
+    border: none;
+    padding: 8px;
+    font-size: 11px;
+    font-weight: bold;
+    cursor: pointer;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
 }
 
 /* =========================================
-   INTERFACE CUSTOM & SPINNER
+   RESPONSIVIDADE (MOBILE)
+   ========================================= */
+@media (max-width: 768px) {
+    body { flex-direction: column; }
+
+    .sidebar {
+        width: 100%;
+        height: 65px;
+        position: fixed;
+        bottom: 0;
+        flex-direction: row;
+        z-index: 1000;
+        border-top: 1px solid #3d4e5e;
+    }
+
+    .sidebar-header { display: none; }
+    .nav-menu { display: flex; width: 100%; justify-content: space-around; }
+    .nav-btn {
+        flex: 1;
+        flex-direction: column;
+        padding: 5px;
+        font-size: 10px;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .main-content {
+        padding: 15px;
+        margin-bottom: 70px;
+    }
+
+    /* Correção do Modal Mobile */
+    .modal-overlay { padding: 0; }
+
+    .modal-card {
+        max-height: 100vh;
+        height: 100vh;
+        border-radius: 0;
+    }
+
+    .modal-body {
+        padding: 15px;
+        padding-bottom: 140px !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .modal-footer {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        z-index: 2010;
+        background: white;
+        box-shadow: 0 -4px 12px rgba(0,0,0,0.1);
+        padding: 15px;
+    }
+
+    .form-grid { grid-template-columns: 1fr; }
+    .preview-grid { grid-template-columns: 1fr 1fr; }
+}
+
+/* =========================================
+   INTERFACE HELPERS
    ========================================= */
 .spinner {
     width: 50px; height: 50px;
@@ -274,68 +360,6 @@ input, textarea {
 
 .btn-save { background: var(--blue); color: white; border: none; padding: 12px 25px; border-radius: 8px; font-weight: bold; cursor: pointer; }
 .btn-cancel { background: #95a5a6; color: white; border: none; padding: 12px 25px; border-radius: 8px; font-weight: bold; cursor: pointer; }
-
-/* =========================================
-   RESPONSIVIDADE (MOBILE) - CORREÇÕES
-   ========================================= */
-@media (max-width: 768px) {
-    body { flex-direction: column; }
-
-    .sidebar {
-        width: 100%;
-        height: 65px;
-        position: fixed;
-        bottom: 0;
-        flex-direction: row;
-        border-top: 1px solid #3d4e5e;
-        z-index: 1000;
-    }
-
-    .sidebar-header { display: none; }
-    .nav-menu { display: flex; width: 100%; justify-content: space-around; }
-    .nav-btn {
-        flex: 1;
-        flex-direction: column;
-        padding: 5px;
-        font-size: 10px;
-        gap: 2px;
-        text-align: center;
-        justify-content: center;
-    }
-
-    .main-content {
-        padding: 15px;
-        margin-bottom: 75px; /* Espaço para a sidebar bottom */
-    }
-
-    .form-grid { grid-template-columns: 1fr; }
-    .full-width { grid-column: auto; }
-
-    /* Ajuste do Modal para não cobrir conteúdo */
-    .modal-overlay { padding: 0; }
-    .modal-card {
-        max-height: 100vh;
-        height: 100vh;
-        border-radius: 0;
-    }
-
-    .modal-body {
-        /* PADDING EXTRA NO FUNDO PARA O CONTEÚDO NÃO FICAR ATRÁS DO FOOTER */
-        padding-bottom: 120px !important;
-    }
-
-    .modal-footer {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        z-index: 100;
-        background: white;
-        padding: 15px;
-        box-shadow: 0 -4px 12px rgba(0,0,0,0.15);
-        justify-content: center;
-    }
-}
 
 /* =========================================
    IMPRESSÃO
