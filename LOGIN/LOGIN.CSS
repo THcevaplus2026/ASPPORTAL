@@ -1,0 +1,305 @@
+/* --- VARIÁVEIS E BASE --- */
+:root {
+   --ceva-blue: #002d72;
+   --soft-red: #e57373;
+   --dark-bg: #1e2226;
+   --light-header: #e8e6e1;
+   --input-line: #3d444b;
+}
+
+* {
+   margin: 0;
+   padding: 0;
+   box-sizing: border-box;
+   font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+body, html {
+   height: 100%;
+   width: 100%;
+   background-color: var(--dark-bg);
+   overflow: hidden; /* Mantém a tela fixa sem scroll */
+}
+
+.split-container {
+   display: flex;
+   min-height: 100vh;
+   width: 100%;
+}
+
+/* --- LADO ESQUERDO (IDENTIDADE VISUAL) --- */
+.left-side {
+   flex: 1.2;
+   background-color: var(--light-header);
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   justify-content: center;
+   padding: 40px;
+   border-bottom-right-radius: 100px;
+   z-index: 2;
+   position: relative;
+}
+
+.logo-top-left {
+   position: absolute;
+   top: 30px;
+   left: 40px;
+   width: 160px;
+}
+
+.ceva-logo {
+   width: 100%;
+   height: auto;
+   display: block;
+   mix-blend-mode: multiply;
+   filter: contrast(1.1);
+}
+
+.left-side h1 {
+   color: var(--ceva-blue);
+   font-size: clamp(40px, 8vw, 80px);
+   font-weight: 900;
+   line-height: 1;
+   text-transform: uppercase;
+   letter-spacing: -3px;
+}
+
+/* --- LADO DIREITO (LOGIN) --- */
+.right-side {
+   flex: 1;
+   background-color: var(--dark-bg);
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   padding: 30px;
+}
+
+.login-box {
+   width: 100%;
+   max-width: 380px;
+}
+
+.input-group {
+   margin-bottom: 25px;
+}
+
+.input-group label {
+   display: block;
+   color: #888;
+   font-size: 11px;
+   margin-bottom: 8px;
+   text-transform: uppercase;
+   letter-spacing: 1px;
+}
+
+.input-group input {
+   width: 100%;
+   padding: 12px 5px;
+   background: transparent;
+   border: none;
+   border-bottom: 2px solid var(--input-line);
+   color: white;
+   font-size: 16px;
+   outline: none;
+   transition: border-bottom-color 0.3s ease;
+}
+
+.input-group input:focus {
+   border-bottom-color: var(--soft-red);
+}
+
+/* Estilo para quando o input está desativado (carregando) */
+.btn-entrar:disabled {
+    background-color: #555;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.options-group {
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   margin-bottom: 30px;
+   color: #888;
+   font-size: 14px;
+}
+
+.checkbox-area {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.forgot-link {
+   color: var(--soft-red);
+   text-decoration: none;
+   font-weight: 500;
+}
+
+.forgot-link:hover {
+    text-decoration: underline;
+}
+
+.btn-entrar {
+   width: 100%;
+   padding: 16px;
+   background-color: var(--soft-red);
+   color: white;
+   border: none;
+   border-radius: 8px;
+   font-size: 16px;
+   font-weight: bold;
+   cursor: pointer;
+   transition: 0.3s;
+   letter-spacing: 1px;
+}
+
+.btn-entrar:hover:not(:disabled) {
+    background-color: #ef5350;
+    box-shadow: 0 5px 15px rgba(229, 115, 115, 0.4);
+}
+
+#message {
+   margin-top: 20px;
+   text-align: center;
+   color: #888;
+   font-size: 13px;
+   min-height: 20px;
+}
+
+.error { color: #ff5252 !important; font-weight: bold; }
+.success { color: #66bb6a !important; font-weight: bold; }
+
+/* --- INTERFACE PRÓPRIA (MODAIS) --- */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.85);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    backdrop-filter: blur(4px);
+}
+
+.modal-box {
+    background-color: var(--light-header);
+    padding: 35px;
+    border-radius: 20px;
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+}
+
+.modal-box h3 {
+    color: var(--ceva-blue);
+    margin-bottom: 15px;
+    font-size: 22px;
+    text-transform: uppercase;
+}
+
+.modal-box p {
+    color: #444;
+    font-size: 14px;
+    margin-bottom: 25px;
+    line-height: 1.4;
+}
+
+.modal-box input {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 25px;
+    outline: none;
+    font-size: 16px;
+    text-align: center;
+}
+
+/* Estilo para input readonly no modal */
+.modal-box input[readonly] {
+    background-color: #eee;
+    color: #666;
+    border-style: dashed;
+}
+
+.modal-box input:focus:not([readonly]) {
+    border-color: var(--ceva-blue);
+}
+
+.modal-buttons {
+    display: flex;
+    gap: 12px;
+}
+
+.btn-confirm {
+    flex: 2;
+    background-color: var(--ceva-blue);
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.btn-cancel {
+    flex: 1;
+    background-color: #bbb;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.btn-confirm:hover { background-color: #001d4a; }
+.btn-cancel:hover { background-color: #999; }
+
+#resultBody {
+    word-wrap: break-word;
+}
+
+#resultBody strong {
+    color: var(--ceva-blue);
+}
+
+/* --- RESPONSIVIDADE (MOBILE) --- */
+@media (max-width: 850px) {
+   .split-container {
+       flex-direction: column;
+   }
+
+   .left-side {
+       flex: none;
+       height: 35vh;
+       padding: 30px 20px;
+       border-bottom-right-radius: 0;
+       border-bottom-left-radius: 40px;
+   }
+
+   .logo-top-left {
+       top: 20px;
+       left: 20px;
+       width: 120px;
+   }
+
+   .left-side h1 {
+       font-size: 36px;
+       margin-top: 40px;
+   }
+
+   .right-side {
+       flex: 1;
+       padding: 40px 20px;
+   }
+}

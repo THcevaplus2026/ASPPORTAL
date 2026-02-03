@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nova Senha | CEVA</title>
+    <link rel="stylesheet" href="LOGIN/LOGIN.CSS">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+<div class="split-container">
+    <div class="left-side">
+        <div class="logo-top-left">
+            <img src="LOGIN/IMAGEM/LOGOTIPO/LOGOS.png" alt="CEVA Logo" class="ceva-logo">
+        </div>
+        <div class="welcome-content">
+            <h1>REDEFINIR ACESSO</h1>
+        </div>
+    </div>
+
+    <div class="right-side">
+        <div class="login-box">
+            <form id="resetForm">
+                <div class="input-group">
+                    <label for="newPassword">NOVA SENHA</label>
+                    <input type="password" id="newPassword" placeholder="Mínimo 6 caracteres" required>
+                </div>
+                <div class="input-group">
+                    <label for="confirmPassword">CONFIRMAR SENHA</label>
+                    <input type="password" id="confirmPassword" placeholder="Repita a nova senha" required>
+                </div>
+                <button type="submit" id="btnReset" class="btn-entrar">ATUALIZAR SENHA</button>
+            </form>
+            <div id="message">Aguardando entrada...</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Use as mesmas credenciais do seu LOGIN.JS
+    const SUPABASE_URL = 'https://kwolnazucrsjlmsxiayk.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_0...'; // Sua chave completa aqui
+    const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    document.getElementById('resetForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const newPassword = document.getElementById('newPassword').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+
+        if (newPassword !== confirmPassword) {
+            alert("As senhas não coincidem!");
+            return;
+        }
+
+        const { error } = await _supabase.auth.updateUser({ password: newPassword });
+
+        if (error) {
+            alert("Erro ao atualizar: " + error.message);
+        } else {
+            alert("Senha alterada com sucesso!");
+            window.location.href = "INDEX.HTML";
+        }
+    });
+</script>
+</body>
+</html>

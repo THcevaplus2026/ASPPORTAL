@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>L&Q System | Inbound</title>
+    <link rel="stylesheet" href="TELAINICIAL.CSS">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+<aside class="sidebar">
+    <div class="sidebar-header">
+        <span class="material-icons">inventory_2</span>
+        <h2>L&Q System</h2>
+    </div>
+    <nav class="nav-menu">
+        <button class="nav-btn active" id="tab-rec" onclick="trocarAba('recebimento')">
+            <span class="material-icons">add_circle</span><span>Recebimento</span>
+        </button>
+        <button class="nav-btn" id="tab-fin" onclick="trocarAba('finalizado')">
+            <span class="material-icons">history</span><span>Finalizados</span>
+        </button>
+        <button class="nav-btn" id="tab-qua" onclick="trocarAba('qualidade')">
+            <span class="material-icons">verified_user</span><span>Qualidade</span>
+        </button>
+        <button class="nav-btn" id="tab-exe" onclick="trocarAba('exemplos')">
+            <span class="material-icons">visibility</span><span>EXEMPLOS</span>
+        </button>
+    </nav>
+</aside>
+
+<main class="main-content">
+    <section id="tela-recebimento">
+        <div class="header-section">
+            <h1>Painel Operacional</h1>
+            <button class="btn-novo-processo" onclick="abrirModal(false)">
+                <span class="material-icons">add_a_photo</span>
+                <span class="text-btn">NOVO PROCESSO</span>
+            </button>
+        </div>
+        <h3 class="session-title">Última Conferência Realizada:</h3>
+        <div id="container-recente"></div>
+    </section>
+
+    <section id="tela-finalizado" style="display: none;">
+        <div class="header-section">
+            <h1>Histórico de Cargas</h1>
+            <div class="search-box">
+                <span class="material-icons">search</span>
+                <input type="text" id="inputPesquisa" placeholder="Pesquisar NF..." onkeyup="filtrarHistorico()">
+            </div>
+        </div>
+        <div id="container-historico"></div>
+        <div id="pagination-controls" class="pagination"></div>
+    </section>
+
+    <section id="tela-qualidade" style="display: none;">
+        <div class="header-section">
+            <h1>Gestão de Qualidade</h1>
+            <div class="search-box">
+                <span class="material-icons">search</span>
+                <input type="text" id="inputPesquisaQualidade" placeholder="Pesquisar NF..." onkeyup="filtrarQualidade()">
+            </div>
+        </div>
+        <div id="container-qualidade"></div>
+        <div id="pagination-qualidade" class="pagination"></div>
+    </section>
+
+    <section id="tela-exemplos" style="display: none;">
+        <div class="header-section"><h1>Modelos de Fotos Padrão</h1></div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+            <div class="card-registro" style="flex-direction: column; align-items: flex-start; cursor: pointer; border-left: 5px solid #2196f3;" onclick="abrirModalExemplo('cidex')">
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                    <span class="material-icons" style="color: #2196f3;">science</span>
+                    <strong style="font-size: 1.1rem;">CIDEX / SANEANTES</strong>
+                </div>
+                <p style="font-size: 0.85rem; color: #666;">Padrões de fotos para materiais saneantes e químicos.</p>
+            </div>
+            <div class="card-registro" style="flex-direction: column; align-items: flex-start; cursor: pointer; border-left: 5px solid #4caf50;" onclick="abrirModalExemplo('dispositivos')">
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                    <span class="material-icons" style="color: #4caf50;">medical_services</span>
+                    <strong style="font-size: 1.1rem;">DISPOSITIVOS MÉDICOS</strong>
+                </div>
+                <p style="font-size: 0.85rem; color: #666;">Padrões para dispositivos, sensores e rebatimento.</p>
+            </div>
+            <div class="card-registro" style="flex-direction: column; align-items: flex-start; cursor: pointer; border-left: 5px solid #ff9800;" onclick="abrirModalExemplo('maquinas')">
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                    <span class="material-icons" style="color: #ff9800;">precision_manufacturing</span>
+                    <strong style="font-size: 1.1rem;">MÁQUINAS</strong>
+                </div>
+                <p style="font-size: 0.85rem; color: #666;">Padrões de equipamentos e integridade técnica.</p>
+            </div>
+        </div>
+    </section>
+</main>
+
+<div id="modal-add" class="modal-overlay">
+    <div class="modal-card">
+        <form id="form-recebimento">
+            <div class="modal-header">
+                <h3 id="modal-titulo">Conferência de Carga</h3>
+                <span class="material-icons" onclick="fecharModal()" style="cursor:pointer">close</span>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="edit-id">
+                <div class="photo-accordion">
+                    <button type="button" class="accordion-header" onclick="toggleFotos()">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span class="material-icons">collections</span>
+                            <span id="label-fotos">EVIDÊNCIAS (0/30)</span>
+                        </div>
+                        <span class="material-icons" id="seta-fotos">expand_more</span>
+                    </button>
+                    <div id="area-fotos" class="accordion-content">
+                        <input type="file" id="evidencia" accept="image/*" multiple style="margin-bottom: 10px;">
+                        <div id="preview-container" class="preview-grid"></div>
+                    </div>
+                </div>
+                <div class="form-grid">
+                    <div class="field full-width"><label class="field-label">Conferente</label><input type="text" id="conferente" required></div>
+                    <div class="field"><label class="field-label">Nota Fiscal (NF)</label><input type="number" id="nf" required></div>
+                    <div class="field"><label class="field-label">Qtd Itens</label><input type="number" id="qty" required></div>
+                    <div class="field"><label class="field-label">Data</label><input type="date" id="data" required></div>
+                    <div class="field"><label class="field-label">Hora</label><input type="time" id="hora" required></div>
+                    <div class="field full-width"><label class="field-label">Observações</label><textarea id="obs" rows="3"></textarea></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-cancel" onclick="fecharModal()">CANCELAR</button>
+                <button type="submit" class="btn-save">SALVAR DADOS</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="modal-exemplos" class="modal-overlay">
+    <div class="modal-card">
+        <div class="modal-header">
+            <h3 id="exemplo-titulo">Exemplos Padrão</h3>
+            <span class="material-icons" onclick="fecharModalExemplo()" style="cursor:pointer">close</span>
+        </div>
+        <div class="modal-body">
+            <div id="informativo-exemplo" class="info-box-styled" style="background: #e3f2fd; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 5px solid #2196f3; color: #0d47a1;"></div>
+
+            <div class="field full-width" style="margin-bottom: 15px; border-bottom: 1px dashed #ccc; padding-bottom: 15px;">
+                <label class="field-label" style="font-weight: bold; color: #e74c3c;">[ADMIN] ADICIONAR NOVOS MODELOS</label>
+                <input type="file" id="input-upload-exemplo" accept="image/*" multiple onchange="adicionarFotoExemplo(this)">
+            </div>
+
+            <div id="container-fotos-exemplo" class="preview-grid"></div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-cancel" style="width: 100%;" onclick="fecharModalExemplo()">ENTENDIDO / FECHAR</button>
+        </div>
+    </div>
+</div>
+
+<div id="modal-senha-qualidade" class="modal-overlay">
+    <div class="modal-card" style="max-width: 350px;">
+        <div class="modal-header"><h3>Acesso Restrito</h3><span class="material-icons" onclick="fecharModalSenha()" style="cursor:pointer">close</span></div>
+        <div class="modal-body">
+            <div class="field">
+                <label class="field-label" style="text-align: center; display: block;">DIGITE A SENHA</label>
+                <input type="password" id="input-senha-app" placeholder="****" style="text-align: center; font-size: 24px; letter-spacing: 5px;">
+            </div>
+        </div>
+        <div class="modal-footer"><button class="btn-save" style="width: 100%;" onclick="verificarSenhaApp()">DESBLOQUEAR</button></div>
+    </div>
+</div>
+
+<div id="custom-dialog" class="modal-overlay" style="z-index: 3000;">
+    <div class="modal-card" style="max-width: 400px; text-align: center;">
+        <div id="dialog-header" class="modal-header" style="justify-content: center;">
+            <h3 id="dialog-title">SISTEMA</h3>
+        </div>
+        <div class="modal-body" style="padding: 30px;">
+            <span id="dialog-icon" class="material-icons" style="font-size: 48px; margin-bottom: 15px;">info</span>
+            <p id="dialog-message" style="font-size: 1.1rem; color: #2f3640; line-height: 1.4;"></p>
+        </div>
+        <div id="dialog-footer" class="modal-footer" style="justify-content: center; gap: 15px;"></div>
+    </div>
+</div>
+
+<div id="loading-overlay" class="modal-overlay" style="z-index: 4000; background: rgba(0,0,0,0.6); display: none;">
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 15px;">
+        <div class="spinner"></div>
+        <p id="loading-text" style="color: white; font-weight: bold; font-size: 1.2rem;">A PROCESSAR...</p>
+    </div>
+</div>
+
+<script src="TELAINICIAL.JS"></script>
+</body>
+</html>

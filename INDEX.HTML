@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Portal Logístico | CEVA</title>
+    <link rel="stylesheet" href="LOGIN/LOGIN.CSS">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+<div class="split-container">
+    <div class="left-side">
+        <div class="logo-top-left">
+            <img src="LOGIN/IMAGEM/LOGOTIPO/LOGOS.png" alt="CEVA Logo" class="ceva-logo">
+        </div>
+
+        <div class="welcome-content">
+            <h1>L&Q SYSTEM</h1>
+        </div>
+    </div>
+
+    <div class="right-side">
+        <div class="login-box">
+            <form id="loginForm">
+                <div class="input-group">
+                    <label for="username">E-MAIL INSTITUCIONAL</label>
+                    <input type="email" id="username" placeholder="Thales.Monteiro@cevaligistics.com" required autocomplete="username">
+                </div>
+
+                <div class="input-group">
+                    <label for="password">SENHA</label>
+                    <input type="password" id="password" placeholder="Digite sua senha" required autocomplete="current-password">
+                </div>
+
+                <div class="options-group">
+                    <label class="checkbox-area">
+                        <input type="checkbox" id="rememberMe"> Lembrar-me
+                    </label>
+                    <a href="javascript:void(0)" onclick="forgotPassword()" class="forgot-link">Esqueceu a senha?</a>
+                </div>
+
+                <button type="submit" id="btnEntrar" class="btn-entrar">ENTRAR</button>
+            </form>
+            <div id="message">Aguardando login...</div>
+        </div>
+    </div>
+</div>
+
+<div id="recoveryModal" class="modal-overlay">
+    <div class="modal-box">
+        <h3>Recuperação de Acesso</h3>
+        <p>Um link de redefinição será enviado para o e-mail institucional:</p>
+
+        <input type="email" id="recoveryEmail" value="Thales.Monteiro@cevaligistics.com" readonly style="background: #f0f0f0; cursor: not-allowed;">
+
+        <div class="modal-buttons">
+            <button type="button" onclick="closeModal()" class="btn-cancel">Cancelar</button>
+            <button type="button" onclick="handleRecovery()" class="btn-confirm">Enviar Link</button>
+        </div>
+    </div>
+</div>
+
+<div id="resultModal" class="modal-overlay">
+    <div class="modal-box">
+        <h3 id="resultTitle">Aviso do Sistema</h3>
+        <div id="resultBody" style="margin: 20px 0; color: #333; line-height: 1.6;"></div>
+        <div class="modal-buttons">
+            <button type="button" onclick="closeResult()" class="btn-confirm" style="width: 100%;">Fechar</button>
+        </div>
+    </div>
+</div>
+
+<script src="LOGIN/LOGIN.JS"></script>
+
+</body>
+</html>
