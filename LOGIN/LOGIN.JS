@@ -6,8 +6,9 @@
 // --- 1. CONFIGURAÇÕES DE CONEXÃO ---
 // Use os dados que aparecem na aba 'Data API' e 'API Keys' do seu Supabase
 const SUPABASE_URL = 'https://kwolnazucrsjlmsxiayk.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_0...'; // Insira sua Publishable Key completa aqui
-const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const SUPABASE_ANON_KEY = 'sb_publishable_O--zQ5iTNhVha54E16oRLA_Q-h0A5G8';
+
+const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // --- 2. BLOQUEIO DE NAVEGAÇÃO (SETAS DO NAVEGADOR) ---
 (function() {
@@ -79,7 +80,7 @@ async function handleRecovery() {
     try {
         const { error } = await _supabase.auth.resetPasswordForEmail(emailAlvo, {
             // URL configurada no painel do Supabase (apontando para a raiz)
-            redirectTo: window.location.origin + '/redefinir-senha.html',
+            redirectTo: window.location.origin + '/redefinirsenha.html',
         });
 
         if (error) throw error;
