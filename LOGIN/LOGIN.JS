@@ -75,7 +75,7 @@ if (loginForm) {
  * Dispara o processo de recuperação para o e-mail institucional
  */
 async function handleRecovery() {
-    const emailAlvo = "Thales.Monteiro@cevaligistics.com";
+    const emailAlvo = "Thales.Monteiro@cevalogistics.com";
 
     try {
         const { error } = await _supabase.auth.resetPasswordForEmail(emailAlvo, {
