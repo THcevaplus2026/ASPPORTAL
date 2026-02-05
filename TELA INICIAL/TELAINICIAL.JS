@@ -293,7 +293,7 @@ async function abrirModalExemplo(categoria) {
         },
         dispositivos: {
             t: "DISPOSITIVOS MÉDICOS",
-            d: "<b>Padrão de Qualidade:</b><br>• Integridade da embalagem<br>• Sensores de temperatura ativos<br>• Itens críticos (Velocity, Cassete)"
+            d: "<b>Padrão de Qualidade:</b><br>• Integridade da embalagem<br>•   Sensores de temperatura ativos<br>• Itens críticos (Velocity, Cassete)"
         },
         maquinas: {
             t: "MÁQUINAS",
